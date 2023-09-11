@@ -105,6 +105,60 @@ void plot_error_vs_step_size() {
     std::cout << "---------------------------------------" << std::endl;
 }
 
+void test_cases() {
+    std::cout << "Testing custom cases..." << std::endl;
+    std::cout << "---------------------------------------" << std::endl;
+
+    // Test Case 1
+    std::vector<Atom> atoms1;
+    read_file("data/test_case_1.txt", atoms1);
+    double energy1 = calculate_total_energy_au(atoms1);
+    std::cout << "Test Case 1 - Calculated Energy: " << energy1 << std::endl;
+    std::cout << "Test Case 1 - Reference Energy: -1.7358" << std::endl;
+
+    auto forces1 = calculate_analytical_forces(atoms1);
+    std::vector<Vector3D> ref_forces1 = {
+            {-0.042191, 0.56398, 0},
+            {-0.89489, 0, 0},
+            {-0.042191, -0.56398, 0},
+            {0.97927, 0, 0}
+    };
+
+    double sum_of_square_forces = 0.0;
+
+    for (size_t i = 0; i < forces1.size(); ++i) {
+        sum_of_square_forces += forces1[i].x * forces1[i].x + forces1[i].y * forces1[i].y + forces1[i].z * forces1[i].z;
+        std::cout << "Atom " << i + 1 << " Force: (" << forces1[i].x << ", " << forces1[i].y << ", " << forces1[i].z << ")" << std::endl;
+        std::cout << "Atom " << i + 1 << " Reference Force: (" << ref_forces1[i].x << ", " << ref_forces1[i].y << ", " << ref_forces1[i].z << ")" << std::endl;
+    }
+    double force_norm1 = std::sqrt(sum_of_square_forces);
+    std::cout << "Force norm for Test Case 1: " << force_norm1 << " Reference: 1.549" << std::endl;
+    std::cout << "---------------------------------------" << std::endl;
+
+    // Test Case 2
+    std::vector<Atom> atoms2;
+    read_file("data/test_case_2.txt", atoms2);
+    double energy2 = calculate_total_energy_au(atoms2);
+    std::cout << "Test Case 2 - Calculated Energy: " << energy2 << std::endl;
+    std::cout << "Test Case 2 - Reference Energy: -2.0192" << std::endl;
+
+    auto forces2 = calculate_analytical_forces(atoms2);
+    std::vector<Vector3D> ref_forces2 = {
+            {0, 2.155, 0},
+            {0, -1.6323, 0},
+            {0, -0.52269, 0}
+    };
+
+    sum_of_square_forces = 0.0;
+    for (size_t i = 0; i < forces2.size(); ++i) {
+        sum_of_square_forces += forces2[i].x * forces2[i].x + forces2[i].y * forces2[i].y + forces2[i].z * forces2[i].z;
+        std::cout << "Atom " << i + 1 << " Force: (" << forces2[i].x << ", " << forces2[i].y << ", " << forces2[i].z << ")" << std::endl;
+        std::cout << "Atom " << i + 1 << " Reference Force: (" << ref_forces2[i].x << ", " << ref_forces2[i].y << ", " << ref_forces2[i].z << ")" << std::endl;
+    }
+    double force_norm2 = std::sqrt(sum_of_square_forces);;
+    std::cout << "Force norm for Test Case 2: " << force_norm2 << " Reference: 2.7534" << std::endl;
+    std::cout << "---------------------------------------" << std::endl;
+}
 
 int main() {
     test_read_file();
@@ -112,6 +166,7 @@ int main() {
     test_structure_optimization();
     test_force_approximations();
     plot_error_vs_step_size();
+    test_cases();
     return 0;
 }
 

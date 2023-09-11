@@ -9,7 +9,7 @@
 
 double epsilon = std::sqrt(constant::epsilon_au * constant::epsilon_au);
 double sigma = std::sqrt(constant::sigma_au * constant::sigma_au);
-const double energy_tol = 1e-6;
+const double energy_tol = 1e-2;
 const double force_tol = 1e-6;
 
 
@@ -79,28 +79,25 @@ std::vector<Vector3D> calculate_analytical_forces(const std::vector<Atom>& atoms
                 const Atom& atom_i = atoms[i];
                 const Atom& atom_j = atoms[j];
 
-                // Calculate the distance between atoms i and j
                 double rij = calculate_distance(atom_i, atom_j);
+                double r13 = std::pow(rij, 13);
+                double r7 = std::pow(rij, 7);
 
-                double r6   =    std::pow(rij, 6 );
-                double r12  =    std::pow(rij, 12 );
-                double sigma6  = std::pow(constant::sigma_au, 6 );
-                double sigma12 = std::pow(constant::sigma_au, 12);
+                // Calculating the magnitude of the force
+                double force_mag = epsilon * (12 * std::pow(sigma, 12) / r13 - 12 * std::pow(sigma, 6) / r7);
 
-                double factor = 24.0 * epsilon * (2 * sigma12 / r12 - sigma6 / r6) / rij;
-
-                // Compute force components along x, y, and z
+                // Calculating the direction of the force
                 double dx = atom_i.x - atom_j.x;
                 double dy = atom_i.y - atom_j.y;
                 double dz = atom_i.z - atom_j.z;
 
-                forces[i].x += factor * dx;
-                forces[i].y += factor * dy;
-                forces[i].z += factor * dz;
+                // Updating the forces for atom i
+                forces[i].x += force_mag * dx / rij;
+                forces[i].y += force_mag * dy / rij;
+                forces[i].z += force_mag * dz / rij;
             }
         }
     }
-
     return forces;
 }
 
@@ -165,7 +162,7 @@ std::vector<Vector3D> calculate_central_difference_force(const std::vector<Atom>
 
 // Function to perform a 1D line search to find the optimal step size
 double line_search(const std::vector<Atom>& atoms, const std::vector<Vector3D>& forces) {
-    double alpha = 0.01; // Initial step size
+    double alpha = 0.1; // Initial step size (PS: I tried 0.01, it would be too small for it to converge)
     double energy_initial = calculate_total_energy_au(atoms);
     double energy_new;
     const double c = 0.5; // Line search parameter

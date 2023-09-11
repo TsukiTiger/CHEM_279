@@ -6,6 +6,8 @@ Welcome to the data directory of Problem Set 1! This directory contains the data
 
 - **`coords.txt`**: Contains coordinate data relevant to the problem set.
 - **`coords_err.txt`**: Contains erroneous Atomic Number data for specific exercises.
+- **`test_case_1.txt`**: Reference test case #1 created by TA Rebecca.
+- **`test_case_2.txt`**: Reference test case #2 created by TA Rebecca.
 
 ## Contributing Data
 
