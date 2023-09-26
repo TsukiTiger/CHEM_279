@@ -117,7 +117,6 @@ std::vector<Vector3D> calculate_forward_difference_force(const std::vector<Atom>
         perturbed_atoms[i].y -= h; // Reset the perturbation
         perturbed_atoms[i].z += h;
         double energy_plus_hz = calculate_total_energy_au(perturbed_atoms);
-
         double energy_initial = calculate_total_energy_au(atoms);
 
         forces[i].x = -(energy_plus_hx - energy_initial) / h;
