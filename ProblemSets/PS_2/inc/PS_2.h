@@ -18,6 +18,15 @@ public:
      */
     GaussianShell();
 
+
+    /*
+     * 3 Gaussian object
+     * one for each coord (x, y, z)
+     *
+     * 3D == looping through each coord (x, y, z)
+     *
+     *
+     * */
     /**
      * @brief Parametrized constructor that initializes a GaussianShell object with specific values.
      * @param c Center of the Gaussian shell.
